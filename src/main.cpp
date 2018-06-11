@@ -77,8 +77,6 @@ int main(int argc, char *argv[])
   const int height = 480;
   Resolution::getInstance(width, height);
   Intrinsics::getInstance(528, 528, 320, 240);
-  std::unique_ptr<Gui> gui(new Gui(true,class_colour_lookup,640,480));
-  std::unique_ptr<ElasticFusionInterface> map(new ElasticFusionInterface());
   // Choose the input Reader, live for a running OpenNI device, PNG for textfile lists of PNG frames
   std::unique_ptr<LogReader> log_reader;
   if (argc > 2) {
@@ -90,6 +88,9 @@ int main(int argc, char *argv[])
       return 1;
     }
   }
+  // Initialise gui and map after log_reader for existing OpenGL context
+  std::unique_ptr<Gui> gui(new Gui(true,class_colour_lookup,640,480));
+  std::unique_ptr<ElasticFusionInterface> map(new ElasticFusionInterface());
   if (!map->Init(class_colour_lookup)) {
     std::cout<<"ElasticFusionInterface init failure"<<std::endl;
   }
